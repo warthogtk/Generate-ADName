@@ -33,6 +33,7 @@ param (
                     "$($lastName[0])$firstName"
                 )
                 if ($outFile){
+                    Remove-item -Path $outfile
                     $usernamesList | ForEach-Object { Write-Host "  $_" ; Add-Content -Path $outFile $_}                
                 }
                 $usernamesList | ForEach-Object { Write-Host "  $_" }
