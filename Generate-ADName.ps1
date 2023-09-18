@@ -3,7 +3,13 @@ param (
     [string]$outFile
 )
 
-
+    if (Test-Path -Path $outFile -Pathtype Leaf)
+    {
+        $confirm_delete = Read-Host "File '$outFile' exists. Are you sure you want to overwrite it ? [Y]es/[N]o"
+        if ($confirm_delete -eq "Y" -or $confirmation -eq "Yes") {
+            Remove-Item -Path $outFile -Force
+    }
+    }
     if (Test-Path -Path $filePath -PathType Leaf) {
         $usernames = Get-Content -Path $filePath
 
@@ -33,10 +39,12 @@ param (
                     "$($lastName[0])$firstName"
                 )
                 if ($outFile){
-                    Remove-item -Path $outfile
                     $usernamesList | ForEach-Object { Write-Host "  $_" ; Add-Content -Path $outFile $_}                
                 }
-                $usernamesList | ForEach-Object { Write-Host "  $_" }
+                else
+                {
+                    $usernamesList | ForEach-Object { Write-Host "  $_" }
+                }
             } else {
                 Write-Host "This line '$line' has not the format 'firstname lastname'."
             }
